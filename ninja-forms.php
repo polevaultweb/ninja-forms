@@ -65,6 +65,7 @@ require_once( NINJA_FORMS_DIR . "/includes/shortcode.php" );
 require_once( NINJA_FORMS_DIR . "/includes/widget.php" );
 require_once( NINJA_FORMS_DIR . "/includes/field-type-groups.php" );
 require_once( NINJA_FORMS_DIR . "/includes/eos.class.php" );
+require_once( NINJA_FORMS_DIR . "/includes/register-sub-cpt.php" );
 
 require_once( NINJA_FORMS_DIR . "/includes/display/scripts.php" );
 
