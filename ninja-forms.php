@@ -378,3 +378,15 @@ function ninja_forms_letters_to_numbers( $size ) {
 	}
 	return $ret;
 }
+
+function ninja_forms_test() {
+	$args = array(
+		'form_title' => 'TEST FORM',
+		'append_page' => 2,
+		'show_title' => 1,
+	);
+
+	ninja_forms_register_form( 'test', $args );
+}
+
+add_action( 'init', 'ninja_forms_test' );

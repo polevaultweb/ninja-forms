@@ -7,44 +7,44 @@ function ninja_forms_register_field($slug, $args = array()){
 	}
 
 	$defaults = array(
-		'conditional' => '',
-		'default_label' => '',		
-		'default_label_pos' => '',
-		'default_value' => '',
- 		'display_function' => '',
- 		'display_label' => true,
- 		'display_wrap' => true,
- 		'edit_conditional' => true,
- 		'edit_custom_class' => true,
- 		'edit_function' => '',
- 		'edit_help' => true,
- 		'edit_label' => true,
- 		'edit_label_pos' => true,
- 		'edit_meta' => true,
- 		'edit_options' => '',
- 		'edit_req' => true,
+		'conditional' 			=> '',
+		'default_label' 		=> '',		
+		'default_label_pos' 	=> '',
+		'default_value' 		=> '',
+ 		'display_function' 		=> '',
+ 		'display_label' 		=> true,
+ 		'display_wrap' 			=> true,
+ 		'edit_conditional' 		=> true,
+ 		'edit_custom_class' 	=> true,
+ 		'edit_function' 		=> '',
+ 		'edit_help' 			=> true,
+ 		'edit_label' 			=> true,
+ 		'edit_label_pos' 		=> true,
+ 		'edit_meta' 			=> true,
+ 		'edit_options' 			=> '',
+ 		'edit_req' 				=> true,
  		'edit_sub_post_process' => '',
- 		'edit_sub_pre_process' => '',
- 		'edit_sub_process' => '',
- 		'esc_html' => true,
-		'group' => '',
-		'interact' => true,
-		'label_pos_options' => '',
- 		'limit' => '',
- 		'name' => $slug,
-		'nesting' => false,
-		'post_process' => '',
- 		'pre_process' => '',
- 		'process' => '',
- 		'process_field' => true,
- 		'req' => false,
- 		'req_validation' => '',
- 		'save_function' => '',
- 		'save_sub' => true,
-	 	'sub_edit' => 'text',
- 		'sub_edit_function' => '',
- 		'use_li' => true,
- 		'visible' => 1,
+ 		'edit_sub_pre_process' 	=> '',
+ 		'edit_sub_process' 		=> '',
+ 		'esc_html' 				=> true,
+		'group' 				=> '',
+		'interact' 				=> true,
+		'label_pos_options' 	=> '',
+ 		'limit' 				=> '',
+ 		'name' 					=> $slug,
+		'nesting' 				=> false,
+		'post_process' 			=> '',
+ 		'pre_process' 			=> '',
+ 		'process' 				=> '',
+ 		'process_field' 		=> true,
+ 		'req' 					=> false,
+ 		'req_validation' 		=> '',
+ 		'save_function' 		=> '',
+ 		'save_sub' 				=> true,
+	 	'sub_edit' 				=> 'text',
+ 		'sub_edit_function' 	=> '',
+ 		'use_li' 				=> true,
+ 		'visible' 				=> 1,
 	);
 
 	// Parse incomming $args into an array and merge it with $defaults
@@ -284,4 +284,53 @@ function ninja_forms_register_tab_metabox_options( $args = array() ){
 	}
 
 	$ninja_forms_tabs_metaboxes[$page][$tab][$slug]['settings'] = $settings;
+}
+
+/*
+ *
+ * Function used to register a form. This form will not be viewable or editable from the Forms List.
+ *
+ * @since 2.3.3
+ * @return void
+ */
+
+function ninja_forms_register_form( $slug, $args = array() ) {
+	global $ninja_forms_registered_forms;
+
+	if( !isset( $ninja_forms_registered_forms ) ){
+		$ninja_forms_registered_forms = array();
+	}
+
+	$defaults = array(
+		'admin_attach_csv' 		=> '',
+		'admin_email_fields'	=> '',
+		'admin_email_msg' 		=> '',
+		'admin_mailto' 			=> array(),
+		'admin_subject' 		=> '',
+		'ajax' 					=> 0,
+		'append_page' 			=> 0,
+		'clear_complete' 		=> 1,
+		'edit_subs'				=> true,
+		'email_from' 			=> '',
+		'email_from_name' 		=> '',
+		'email_type' 			=> '',
+		'fields'				=> array(),
+		'form_title' 			=> '',
+		'hide_complete' 		=> 1,
+		'landing_page' 			=> '',
+		'logged_in' 			=> 0,
+		'save_subs' 			=> 1,
+		'show_title' 			=> '',
+		'success_msg' 			=> '',
+		'user_email_msg' 		=> '',
+		'user_email_fields' 	=> '',
+		'user_subject' 			=> '',
+	);
+
+	// Parse incomming $args into an array and merge it with $defaults
+	$args = wp_parse_args( $args, $defaults );
+
+	foreach( $args as $key => $val ){
+		$ninja_forms_registered_forms[$slug][$key] = $val;
+	}
 }
