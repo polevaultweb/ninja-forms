@@ -3,7 +3,7 @@
 
 function ninja_forms_register_form_export(){
 	if( isset( $_REQUEST['export_form'] ) AND $_REQUEST['export_form'] == 1 ){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 		ninja_forms_export_form( $form_id );
 	}
 }
@@ -12,7 +12,7 @@ add_action( 'admin_init', 'ninja_forms_register_form_export' );
 
 function ninja_forms_register_form_duplicate(){
 	if ( isset ( $_REQUEST['duplicate_form'] ) AND $_REQUEST['duplicate_form'] == 1 ) {
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 		$form_row = ninja_forms_serialize_form( $form_id );
 		ninja_forms_import_form( $form_row );
 		$url = remove_query_arg( array( 'duplicate_form', 'form_id' ) );

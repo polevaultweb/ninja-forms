@@ -53,8 +53,6 @@ add_action( 'wp_head', 'ninja_forms_clear_transient' );
 function ninja_forms_page_append_check(){
 	global $post, $ninja_forms_append_page_form_id;
 
-
-
 	if(is_array($ninja_forms_append_page_form_id)){
 		unset($ninja_forms_append_page_form_id);
 	}
@@ -113,7 +111,7 @@ function ninja_forms_display_form( $form_id = '' ){
 	if($form_id == ''){
 		$function = false;
 		if(isset($_REQUEST['form_id'])){ //If it hasn't, set it to our requested form_id. Sometimes this function can be called without an expressly passed form_id.
-			$form_id = absint( $_REQUEST['form_id'] );
+			$form_id = esc_attr( $_REQUEST['form_id'] );
 		}
 	}else{
 		$function = true;

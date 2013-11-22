@@ -2,14 +2,16 @@
 
 function ninja_forms_sidebar_sorter($array, $sequence){
   $tmp = array();
+
   foreach($sequence as $s){
     foreach($array as $key => $a){
-      if($key == $s){
-        $tmp[$key] = $a;
-        unset( $array[$key] );
-        break;
-      }
-    }
+    	$s = str_replace( 'ninja_forms_metabox_', '', $s );
+      	if($key == $s){
+        	$tmp[$key] = $a;
+        	unset( $array[$key] );
+        	break;
+      	}
+	}
   }
   if( is_array( $array ) AND !empty( $array ) ){
   	  foreach( $array as $key => $a ){

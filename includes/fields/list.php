@@ -622,7 +622,7 @@ function ninja_forms_field_filter_list_data( $data, $field_id ){
 					}
 				}
 			}
-			if ( empty( $tmp_array ) AND $data['list_type'] == 'dropdown' AND $data['label_pos'] != 'inside' ) {
+			if ( empty( $tmp_array ) AND $data['list_type'] == 'dropdown' AND ( !isset ( $data['label_pos'] ) OR $data['label_pos'] != 'inside' ) ) {
 				if ( isset ( $data['list_show_value'] ) AND $data['list_show_value'] == 1 AND $data['label_pos'] != 'inside' ) {
 					$tmp_array[] = $data['list']['options'][0]['value'];
 				} else {

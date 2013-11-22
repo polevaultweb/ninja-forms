@@ -9,7 +9,7 @@ function ninja_forms_register_field($slug, $args = array()){
 	$defaults = array(
 		'conditional' 			=> '',
 		'default_label' 		=> '',		
-		'default_label_pos' 	=> '',
+		'default_label_pos' 	=> 'left',
 		'default_value' 		=> '',
  		'display_function' 		=> '',
  		'display_label' 		=> true,
@@ -40,7 +40,7 @@ function ninja_forms_register_field($slug, $args = array()){
  		'req' 					=> false,
  		'req_validation' 		=> '',
  		'save_function' 		=> '',
- 		'save_sub' 				=> true,
+ 		'save_sub' 				=> 1,
 	 	'sub_edit' 				=> 'text',
  		'sub_edit_function' 	=> '',
  		'use_li' 				=> true,
@@ -307,19 +307,19 @@ function ninja_forms_register_form( $slug, $args = array() ) {
 		'admin_email_msg' 		=> '',
 		'admin_mailto' 			=> array(),
 		'admin_subject' 		=> '',
-		'ajax' 					=> 0,
+		'ajax' 					=> false,
 		'append_page' 			=> 0,
-		'clear_complete' 		=> 1,
+		'clear_complete' 		=> true,
 		'edit_subs'				=> true,
 		'email_from' 			=> '',
 		'email_from_name' 		=> '',
 		'email_type' 			=> '',
 		'fields'				=> array(),
 		'form_title' 			=> '',
-		'hide_complete' 		=> 1,
+		'hide_complete' 		=> true,
 		'landing_page' 			=> '',
-		'logged_in' 			=> 0,
-		'save_subs' 			=> 1,
+		'logged_in' 			=> false,
+		'save_subs' 			=> true,
 		'show_title' 			=> '',
 		'success_msg' 			=> '',
 		'user_email_msg' 		=> '',
@@ -330,7 +330,13 @@ function ninja_forms_register_form( $slug, $args = array() ) {
 	// Parse incomming $args into an array and merge it with $defaults
 	$args = wp_parse_args( $args, $defaults );
 
+	$ninja_forms_registered_forms[$slug]['fields'] = $args['fields'];
+	unset( $args['fields'] );
+
 	foreach( $args as $key => $val ){
-		$ninja_forms_registered_forms[$slug][$key] = $val;
+		$ninja_forms_registered_forms[$slug]['data'][$key] = $val;
 	}
+
+	$ninja_forms_registered_forms[$slug]['id'] = $slug;
+
 }

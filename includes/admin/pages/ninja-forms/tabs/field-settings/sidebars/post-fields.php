@@ -8,7 +8,7 @@ if ( !function_exists ( 'ninja_forms_register_field_post_tags' ) ) {
 			return false;
 
 		if(isset($_REQUEST['form_id'])){
-			$form_id = absint( $_REQUEST['form_id'] );
+			$form_id = esc_attr( $_REQUEST['form_id'] );
 		}else{
 			$form_id = '';
 		}

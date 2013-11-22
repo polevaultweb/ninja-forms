@@ -8,7 +8,6 @@ function ninja_forms_save_sub(){
 	global $ninja_forms_processing, $ninja_forms_fields;
 
 	if($ninja_forms_processing->get_form_setting('save_subs') == 1){
-
 		$action = $ninja_forms_processing->get_action();
 		$user_id = $ninja_forms_processing->get_user_ID();
 

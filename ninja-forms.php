@@ -57,7 +57,7 @@ define("NINJA_FORMS_FIELDS_TABLE_NAME", $wpdb->prefix . "ninja_forms_fields");
 define("NINJA_FORMS_FAV_FIELDS_TABLE_NAME", $wpdb->prefix . "ninja_forms_fav_fields");
 define("NINJA_FORMS_SUBS_TABLE_NAME", $wpdb->prefix . "ninja_forms_subs");
 
-define("NINJA_FORMS_JS_DEBUG", false);
+define("NINJA_FORMS_JS_DEBUG", true);
 
 /* Require Core Files */
 require_once( NINJA_FORMS_DIR . "/includes/database.php" );
@@ -381,12 +381,83 @@ function ninja_forms_letters_to_numbers( $size ) {
 
 function ninja_forms_test() {
 	$args = array(
-		'form_title' => 'TEST FORM',
+		'form_title' => 'JAMES DOESN\'T RECOGNIZE!',
 		'append_page' => 2,
-		'show_title' => 1,
+		'show_title' => false,
+		'clear_complete' => false,
+		'hide_complete' => false,
+		'success_msg' => __( 'Thanks for filling out my form!' ),
+		'edit_subs' => true,
+		'fields' => array(
+			array(
+				'id' => 'contact_first_name',
+				'form_id' => 'test',
+				'type' => '_text',
+				'data' => array(
+					'label' => 'First Name',
+					'from_name' => true,
+					'req' => true,
+				),
+			),			
+			array(
+				'id' => 'contact_last_name',
+				'form_id' => 'test',
+				'type' => '_text',
+				'data' => array(
+					'label' => 'Last Name',
+					'from_name' => true,
+				),
+			),
+			array(
+				'id' => 'contact_email',
+				'form_id' => 'test',
+				'type' => '_text',
+				'data' => array(
+					'label' => 'Email Address',
+					'email' => true,
+					'send_email' => true,
+					'replyto_email' => true,
+				),
+			),
+			array(
+				'id' => 'contact_ref',
+				'form_id' => 'test',
+				'type' => '_list',
+				'data' => array(
+					'label' => 'How did you hear about us?',
+					'list_type' => 'dropdown',
+					'list' => array( 
+						'options' => array(
+							array( 'label' => 'Google', 'value' => 'google' ),
+							array( 'label' => 'Yahoo!', 'value' => 'yahoo' ),
+							array( 'label' => 'Friend', 'value' => 'friend' ),
+						),
+					),
+				),
+			),
+			array(
+				'id' => 'contact_comment',
+				'form_id' => 'test',
+				'type' => '_textarea',
+				'data' => array(
+					'label' => 'What\'s on your mind?',
+					'textarea_rte' => true,
+					'textarea_media' => false,
+					'disable_rte_mobile' => true,
+				),
+			),
+			array(
+				'id' => 'contact_submit',
+				'form_id' => 'test',
+				'type' => '_submit',
+				'data' => array(
+					'label' => 'Submit',
+				),
+			),
+		),
 	);
 
 	ninja_forms_register_form( 'test', $args );
 }
 
-add_action( 'init', 'ninja_forms_test' );
+add_action( 'init', 'ninja_forms_test', 1 );

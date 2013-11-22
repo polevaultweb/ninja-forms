@@ -21,14 +21,14 @@ function ninja_forms_register_sidebar_select_subs(){
 }
 
 function ninja_forms_sidebar_select_subs(){
-	$form_results = ninja_forms_get_all_forms();
+	$form_results = ninja_forms_get_all_forms(false, 'view_subs');
 
 	if( isset( $_REQUEST['form_id']) AND $_REQUEST['form_id'] == '' ){
 		unset($_SESSION['ninja_forms_form_id']);
 		$form_id = '';
 	}else if( isset( $_REQUEST['form_id'] ) AND $_REQUEST['form_id'] != '' ){
-		$_SESSION['ninja_forms_form_id'] = absint( $_REQUEST['form_id'] );
-		$form_id = absint( $_REQUEST['form_id'] );
+		$_SESSION['ninja_forms_form_id'] = esc_attr( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}else if( isset( $_SESSION['ninja_forms_form_id']) AND $_SESSION['ninja_forms_form_id'] != 'all' ){
 		$form_id = $_SESSION['ninja_forms_form_id'];
 	}else{

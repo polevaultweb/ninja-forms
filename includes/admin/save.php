@@ -9,7 +9,7 @@ function ninja_forms_admin_save(){
 
 			$data_array = array();
 			if ( isset( $_REQUEST['form_id'] ) and $_REQUEST['form_id'] != 'new' ) {
-				$form_id = absint( $_REQUEST['form_id'] );
+				$form_id = esc_attr( $_REQUEST['form_id'] );
 			} else if ( isset ( $_REQUEST['form_id'] ) and $_REQUEST['form_id'] == 'new' ) {
 				$form_id = 'new';
 			} else {

@@ -23,7 +23,7 @@ function ninja_forms_export_subs_to_csv( $sub_ids = '', $return = false ){
 	if ( isset ( $ninja_forms_processing ) ) {
 		$form_id = $ninja_forms_processing->get_form_ID();
 	} else if ( isset($_REQUEST['form_id'] ) ){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}
 	//Get the fields attached to the Form ID
 	$field_results = ninja_forms_get_fields_by_form_id($form_id);
@@ -63,7 +63,7 @@ function ninja_forms_export_subs_to_csv( $sub_ids = '', $return = false ){
 			$value_array[$x][] = $date_updated;
 			if(is_array($sub_row['data']) AND !empty($sub_row['data'])){
 				foreach( $label_array[0] as $field_id => $label ){
-					if( $field_id != 0 ){
+					if( !empty ( $field_id ) ){
 						$found = false;
 						foreach( $sub_row['data'] as $data ){
 							$data['user_value'] = ninja_forms_stripslashes_deep( $data['user_value'] );
@@ -80,6 +80,7 @@ function ninja_forms_export_subs_to_csv( $sub_ids = '', $return = false ){
 						if( !$found ){
 							$user_value = '';
 						}
+						
 						$value_array[$x][] = apply_filters( 'ninja_forms_export_sub_value', $user_value, $field_id );
 					}
 				}
@@ -104,10 +105,12 @@ function ninja_forms_export_subs_to_csv( $sub_ids = '', $return = false ){
 			apply_filters('ninja_forms_csv_enclosure','"') , 
 			apply_filters('ninja_forms_csv_terminator',"\n") );
 	}else{
+
 		header("Content-type: application/csv");
 		header("Content-Disposition: attachment; filename=".$filename);
 		header("Pragma: no-cache");
 		header("Expires: 0");
+
 		echo apply_filters('ninja_forms_csv_bom',"\xEF\xBB\xBF") ; // Byte Order Mark
 		echo str_putcsv($array , 
 			apply_filters('ninja_forms_csv_delimiter',',') , 

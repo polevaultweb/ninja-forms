@@ -53,7 +53,7 @@ function ninja_forms_admin(){
 	$current_page = esc_html( $_REQUEST['page'] );
 
 	if(isset($_REQUEST['form_id'])){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 		$form_row = ninja_forms_get_form_by_id($form_id);
 		$data = $form_row['data'];
 	}else{

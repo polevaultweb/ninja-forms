@@ -2,7 +2,7 @@
 
 function ninja_forms_register_tab_field_settings(){
 	if(isset($_REQUEST['form_id'])){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}else{
 		$form_id = '';
 	}
@@ -24,7 +24,7 @@ add_action('admin_init', 'ninja_forms_register_tab_field_settings');
 function ninja_forms_tab_field_settings(){
 	global $wpdb;
 	if(isset($_REQUEST['form_id'])){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}else{
 		$form_id = '';
 	}

@@ -32,8 +32,8 @@ function ninja_forms_tab_view_subs(){
 		unset($_SESSION['ninja_forms_form_id']);
 		$form_id = $first_form_id;
 	}else if( isset( $_REQUEST['form_id'] ) AND $_REQUEST['form_id'] != '' ){
-		$_SESSION['ninja_forms_form_id'] = absint( $_REQUEST['form_id'] );
-		$form_id = absint( $_REQUEST ['form_id'] );
+		$_SESSION['ninja_forms_form_id'] = esc_attr( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST ['form_id'] );
 	}else if( isset( $_SESSION['ninja_forms_form_id']) AND $_SESSION['ninja_forms_form_id'] != 'all' ){
 		$form_id = $_SESSION['ninja_forms_form_id'];
 	}else{
@@ -552,7 +552,7 @@ function ninja_forms_save_view_subs( $form_id, $data = array() ){
 					$date_format = 'm/d/Y';
 				}
 				if( isset( $_REQUEST['form_id'] ) AND !empty( $_REQUEST['form_id'] ) ){
-					$form_id = absint( $_REQUEST['form_id'] );
+					$form_id = esc_attr( $_REQUEST['form_id'] );
 				}else{
 					$form_id = '';
 				}

@@ -18,7 +18,7 @@ function ninja_forms_new_field(){
 	global $wpdb, $ninja_forms_fields;
 
 	$type = esc_html( $_REQUEST['type'] );
-	$form_id = absint( $_REQUEST['form_id'] );
+	$form_id = esc_attr( $_REQUEST['form_id'] );
 
 	if( isset( $ninja_forms_fields[$type]['name'] ) ){
 		$type_name = $ninja_forms_fields[$type]['name'];
@@ -76,7 +76,7 @@ function ninja_forms_delete_form( $form_id = '' ){
 	global $wpdb;
 	if( $form_id == '' ){
 		$ajax = true;
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}else{
 		$ajax = false;
 	}
@@ -104,7 +104,7 @@ add_action('wp_ajax_ninja_forms_insert_fav', 'ninja_forms_insert_fav');
 function ninja_forms_insert_fav(){
 	global $wpdb, $ninja_forms_fields;
 	$fav_id = absint( $_REQUEST['fav_id'] );
-	$form_id = absint( $_REQUEST['form_id'] );
+	$form_id = esc_attr( $_REQUEST['form_id'] );
 
 	$fav_row = ninja_forms_get_fav_by_id($fav_id);
 
@@ -131,7 +131,7 @@ add_action('wp_ajax_ninja_forms_insert_def', 'ninja_forms_insert_def');
 function ninja_forms_insert_def(){
 	global $wpdb, $ninja_forms_fields;
 	$def_id = absint( $_REQUEST['def_id'] );
-	$form_id = absint( $_REQUEST['form_id'] );
+	$form_id = esc_attr( $_REQUEST['form_id'] );
 
 	$def_row = ninja_forms_get_def_by_id($def_id);
 
@@ -313,8 +313,8 @@ function ninja_forms_side_sortable(){
 	$plugin_settings = get_option( 'ninja_forms_settings' );
 	$page = esc_html( $_REQUEST['page'] );
 	$tab = esc_html( $_REQUEST['tab'] );
-	$order = esc_html( $_REQUEST['order'] );
-
+	$order = $_REQUEST['order'];
+	
 	$plugin_settings['sidebars'][$page][$tab] = $order;
 	update_option( 'ninja_forms_settings', $plugin_settings );
 

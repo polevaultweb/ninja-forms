@@ -34,16 +34,29 @@ function ninja_forms_insert_field( $form_id, $args = array() ){
 	return $new_id;
 }
 
-function ninja_forms_get_form_by_id($form_id){
-	global $wpdb;
-	$form_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_TABLE_NAME." WHERE id = %d", $form_id), ARRAY_A);
-	$form_row['data'] = unserialize($form_row['data']);
-	$form_row['data'] = ninja_forms_stripslashes_deep($form_row['data']);
+function ninja_forms_get_form_by_id( $form_id ){
+	global $wpdb, $ninja_forms_registered_forms;
+	if ( is_numeric ( $form_id ) ) {
+		$form_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_TABLE_NAME." WHERE id = %d", $form_id), ARRAY_A);
+		$form_row['data'] = unserialize($form_row['data']);
+	} else {
+		if ( isset ( $ninja_forms_registered_forms[ $form_id ] ) ) {
+			$form_row = array();
+			$form_row = $ninja_forms_registered_forms[ $form_id ];
+		} else {
+			$form_row = false;
+		}
+	}
+
+	if ( $form_row ) {
+		$form_row['data'] = ninja_forms_stripslashes_deep( $form_row['data'] );
+	}
+		
 	return $form_row;
 }
 
-function ninja_forms_get_all_forms( $debug = false ){
-	global $wpdb;
+function ninja_forms_get_all_forms( $debug = false, $location = '' ){
+	global $wpdb, $ninja_forms_registered_forms;
 	if( isset( $_REQUEST['debug'] ) AND $_REQUEST['debug'] == true ){
 		$debug = true;
 	}
@@ -63,15 +76,45 @@ function ninja_forms_get_all_forms( $debug = false ){
 			$x++;
 		}
 	}
+
+	if ( isset ( $ninja_forms_registered_forms ) and is_array ( $ninja_forms_registered_forms ) ) {
+		foreach ( $ninja_forms_registered_forms as $id => $form ) {
+			if ( $location == 'view_subs' ) {
+				if ( isset ( $form['data']['edit_subs'] ) and $form['data']['edit_subs'] ) {
+					$form_results[$x] = $form;
+					$x++;
+				}
+			} else if ( $location == 'append' ) {
+				if ( isset ( $form['data']['append_page'] ) and $form['data']['append_page'] != 0 ) {
+					$form_results[$x] = $form;
+					$x++;
+				}
+			}
+		}
+	}
+
 	$form_results = array_values($form_results);
 	return $form_results;
 }
 
 function ninja_forms_get_form_by_field_id( $field_id ){
-	global $wpdb;
-	$form_id = $wpdb->get_row($wpdb->prepare("SELECT form_id FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE id = %d", $field_id), ARRAY_A);
-	$form_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_TABLE_NAME." WHERE id = %d", $form_id), ARRAY_A);
-	$form_row['data'] = unserialize($form_row['data']);
+	global $wpdb, $ninja_forms_registered_forms;
+	if ( is_numeric ( $field_id ) ) {
+		$form_id = $wpdb->get_row($wpdb->prepare("SELECT form_id FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE id = %d", $field_id), ARRAY_A);
+		$form_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_TABLE_NAME." WHERE id = %d", $form_id), ARRAY_A);
+		$form_row['data'] = unserialize($form_row['data']);		
+	} else {
+		if ( is_array ( $ninja_forms_registered_forms ) and !empty ( $ninja_forms_registered_forms ) ) {
+			foreach ( $ninja_forms_registered_forms as $slug => $data ) {
+				foreach ( $data['fields'] as $field ) {
+					if ( $field['id'] == $field_id ) {
+						$form_row = $ninja_forms_registered_forms[$slug];
+					}
+				}
+			} 
+		}
+	}
+
 	return $form_row;
 }
 
@@ -79,7 +122,7 @@ function ninja_forms_get_form_ids_by_post_id( $post_id ){
 	global $wpdb;
 	$form_ids = array();
 	if( is_page( $post_id ) ){
-		$form_results = ninja_forms_get_all_forms();
+		$form_results = ninja_forms_get_all_forms(false, 'append');
 		if(is_array($form_results) AND !empty($form_results)){
 			foreach($form_results as $form){
 				$form_data = $form['data'];
@@ -124,27 +167,50 @@ function ninja_forms_update_form( $args ){
 // Begin Field Interaction Functions
 
 function ninja_forms_get_field_by_id($field_id){
-	global $wpdb;
-	$field_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE id = %d", $field_id), ARRAY_A);
-	if( $field_row != null ){
-		$field_row['data'] = unserialize($field_row['data']);
-		return $field_row;
-	}else{
+	global $wpdb, $ninja_forms_registered_forms;
+	if ( is_numeric ( $field_id ) ) {
+		$field_row = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE id = %d", $field_id), ARRAY_A);
+		if( $field_row != null ){
+			$field_row['data'] = unserialize($field_row['data']);
+			return $field_row;
+		}else{
+			return false;
+		}		
+	} else {
+		if ( is_array ( $ninja_forms_registered_forms ) and !empty ( $ninja_forms_registered_forms ) ) {
+			foreach ( $ninja_forms_registered_forms as $slug => $data ) {
+				foreach ( $data['fields'] as $field ) {
+					if ( $field['id'] == $field_id ) {
+						return $field;
+					}
+				}
+			} 
+		}
 		return false;
 	}
 }
 
 function ninja_forms_get_fields_by_form_id($form_id, $orderby = 'ORDER BY `order` ASC'){
-	global $wpdb;
-	$field_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE form_id = %d ".$orderby, $form_id), ARRAY_A);
-	if(is_array($field_results) AND !empty($field_results)){
-		$x = 0;
-		$count = count($field_results) - 1;
-		while($x <= $count){
-			$field_results[$x]['data'] = unserialize($field_results[$x]['data']);
-			$x++;
+	global $wpdb, $ninja_forms_registered_forms;
+
+	if ( is_numeric ( $form_id ) ) {
+		$field_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".NINJA_FORMS_FIELDS_TABLE_NAME." WHERE form_id = %d ".$orderby, $form_id), ARRAY_A);
+		if(is_array($field_results) AND !empty($field_results)){
+			$x = 0;
+			$count = count($field_results) - 1;
+			while($x <= $count){
+				$field_results[$x]['data'] = unserialize($field_results[$x]['data']);
+				$x++;
+			}
+		}
+	} else {
+		if ( isset ( $ninja_forms_registered_forms[ $form_id ] ) ) {
+			$field_results = $ninja_forms_registered_forms[$form_id]['fields'];
+		} else {
+			$field_results = false;
 		}
 	}
+
 	return $field_results;
 }
 
@@ -230,6 +296,12 @@ function ninja_forms_get_all_defs(){
 
 function ninja_forms_get_subs($args = array()){
 	global $wpdb;
+	$plugin_settings = get_option( 'ninja_forms_settings' );
+	if ( isset ( $plugin_settings['date_format'] ) ) {
+		$date_format = $plugin_settings['date_format'];
+	} else {
+		$date_format = 'm/d/Y';
+	}
 	if(is_array($args) AND !empty($args)){
 		$where = '';
 		if(isset($args['form_id'])){
@@ -259,6 +331,11 @@ function ninja_forms_get_subs($args = array()){
 		}
 		if(isset($args['begin_date']) AND $args['begin_date'] != ''){
 			$begin_date = $args['begin_date'];
+			if ( $date_format == 'd/m/Y' ) {
+				$begin_date = str_replace( '/', '-', $begin_date );
+			} else if ( $date_format == 'm-d-Y' ) {
+				$begin_date = str_replace( '-', '/', $begin_date );
+			}
 			$begin_date = strtotime($begin_date);
 			$begin_date = date("Y-m-d G:i:s", $begin_date);
 			unset($args['begin_date']);
@@ -268,6 +345,11 @@ function ninja_forms_get_subs($args = array()){
 		}
 		if(isset($args['end_date']) AND $args['end_date'] != ''){
 			$end_date = $args['end_date'];
+			if ( $date_format == 'd/m/Y' ) {
+				$end_date = str_replace( '/', '-', $end_date );
+			} else if ( $date_format == 'm-d-Y' ) {
+				$end_date = str_replace( '-', '/', $end_date );
+			}
 			$end_date = strtotime($end_date);
 			$end_date = date("Y-m-d G:i:s", $end_date);
 			unset($args['end_date']);

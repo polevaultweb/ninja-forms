@@ -5,7 +5,7 @@ function ninja_forms_display_tabs(){
 	$current_page = esc_html( $_REQUEST['page'] );
 	$opt = get_option('ninja_forms_settings');
 	if(isset($_REQUEST['form_id'])){
-		$form_id = absint( $_REQUEST['form_id'] );
+		$form_id = esc_attr( $_REQUEST['form_id'] );
 	}else{
 		$form_id = '';
 	}
