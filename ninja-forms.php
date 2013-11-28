@@ -245,6 +245,9 @@ require_once( NINJA_FORMS_DIR . "/includes/display/fields/default-value-filter.p
 
 	/* System Status */
 	require_once( NINJA_FORMS_DIR . "/includes/classes/class-nf-system-status.php" );
+
+
+	require_once( NINJA_FORMS_DIR . "/includes/classes/class-field.php" );
 //}
 
 /* Require Pre-Registered Fields */

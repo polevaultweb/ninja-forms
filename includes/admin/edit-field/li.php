@@ -1,7 +1,7 @@
 <?php
 
 function ninja_forms_edit_field_output_li( $field_id ) {
-	global $wpdb, $ninja_forms_fields;
+	global $wpdb, $ninja_forms_fields, $test;
 	$field_row = ninja_forms_get_field_by_id( $field_id );
 	$current_tab = ninja_forms_get_current_tab();
 	if ( isset ( $_REQUEST['page'] ) ) {
@@ -11,10 +11,13 @@ function ninja_forms_edit_field_output_li( $field_id ) {
 	}
 	
 	$field_type = $field_row['type'];
+	if ( isset ( $test[$field_type] ) ) {
+		$test[$field_type]->test();
+	}
 	$field_data = $field_row['data'];
 	$plugin_settings = get_option( 'ninja_forms_settings' );
 	
-	if ( isset( $ninja_forms_fields[$field_type]['use_li'] ) and $ninja_forms_fields[$field_type]['use_li'] ) {
+	if ( isset ( $test[$field_type] ) and $test[$field_type]->use_li ) {
 
 		if ( isset( $field_row['fav_id'] ) and $field_row['fav_id'] != 0 ) {
 			$fav_id = $field_row['fav_id'];
