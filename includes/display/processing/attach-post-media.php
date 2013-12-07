@@ -32,6 +32,7 @@ add_filter( 'wp_update_attachment_metadata', 'ninja_forms_set_attachment_to_chan
  */
 
 function ninja_forms_attach_media_uploads( $post_id ){
+	
 	if ( isset( $_SESSION['ninja_forms_change_attachment'] ) AND is_array( $_SESSION['ninja_forms_change_attachment'] ) ) {
 		foreach ( $_SESSION['ninja_forms_change_attachment'] as $attachment_id ) {
 			$post = get_post( $attachment_id, ARRAY_A );
@@ -42,6 +43,3 @@ function ninja_forms_attach_media_uploads( $post_id ){
 		$_SESSION['ninja_forms_change_attachment'] = '';
 	}
 }
-
-add_action( 'ninja_forms_create_post', 'ninja_forms_attach_media_uploads' );
-add_action( 'ninja_forms_update_post', 'ninja_forms_attach_media_uploads' );
