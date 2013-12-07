@@ -503,7 +503,11 @@ function ninja_forms_list_terms_checkboxes( $field_id = '', $tax_name = '' ){
 		if ( isset ( $field['data']['exclude_terms'] ) ) {
 			$exclude_terms = $field['data']['exclude_terms'];
 		} else {
-			$exclude_terms = '';
+			$exclude_terms = array();
+		}
+
+		if ( $exclude_terms == '' ) {
+			$exclude_terms = array();
 		}
 
 		$terms = get_terms( $tax_name, array( 'hide_empty' => false ) );
