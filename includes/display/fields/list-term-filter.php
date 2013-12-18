@@ -27,12 +27,7 @@ if ( !function_exists ( 'ninja_forms_field_filter_populate_term' ) ) {
         }
 
         if( $field_type == '_list' AND isset( $field_data['populate_term'] ) AND $field_data['populate_term'] != '' ){
-            // Set the selected option if we are editing a post.
-            if( is_object( $post ) ){
-                $selected_terms = get_the_terms( $post->ID, $field_data['populate_term'] );
-            }else{
-                $selected_term = '';
-            }
+            $selected_terms = apply_filters( 'ninja_forms_term_list_selected', '', $post, $field_data['populate_term'] );
 
             if( is_array( $selected_terms ) ){
                 foreach( $selected_terms as $term ){
