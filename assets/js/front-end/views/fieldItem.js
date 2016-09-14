@@ -7,7 +7,7 @@ define( [], function() {
     		this.listenTo( this.model, 'change:addWrapperClass', this.addWrapperClass, this );
     		this.listenTo( this.model, 'change:removeWrapperClass', this.removeWrapperClass, this );
 
-    		this.template = '#nf-tmpl-field-' + this.model.get( 'wrap_template' );
+    		this.template = '#tmpl-nf-field-' + this.model.get( 'wrap_template' );
 		},
 
 		test: function( model ) {
@@ -46,6 +46,8 @@ define( [], function() {
     				var mask = this.model.get( 'mask' );
     			}
 
+
+				/* POLYFILL */ Number.isInteger = Number.isInteger || function(value) { return typeof value === "number" && isFinite(value) && Math.floor(value) === value; };
     			if ( Number.isInteger( mask ) ) {
     				mask = mask.toString();
     			}
@@ -62,16 +64,16 @@ define( [], function() {
 
 				renderElement: function(){
 					var tmpl = _.find( this.element_templates, function( tmpl ) {
-						if ( 0 < jQuery( '#nf-tmpl-field-' + tmpl ).length ) {
+						if ( 0 < jQuery( '#tmpl-nf-field-' + tmpl ).length ) {
 							return true;
 						}
 					} );
-					var template = Marionette.TemplateCache.get( '#nf-tmpl-field-' + tmpl );
+					var template = nfRadio.channel( 'app' ).request( 'get:template',  '#tmpl-nf-field-' + tmpl );
 					return template( this );
 				},
 
 				renderLabel: function() {
-					var template = Marionette.TemplateCache.get( '#nf-tmpl-field-label' );
+					var template = nfRadio.channel( 'app' ).request( 'get:template',  '#tmpl-nf-field-label' );
 					return template( this );
 				},
 

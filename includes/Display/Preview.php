@@ -21,7 +21,8 @@ final class NF_Display_Preview
         add_filter('the_content', array( $this, 'the_content' ), 9001 );
         add_filter('get_the_excerpt', array( $this, 'the_content' ) );
         add_filter('template_include', array( $this, 'template_include' ) );
-        add_filter('get_edit_post_link', array( $this, 'get_edit_post_link' ) );
+        add_filter('post_thumbnail_html', array( $this, 'post_thumbnail_html' ) );
+	    add_filter('get_edit_post_link', array( $this, 'get_edit_post_link' ) );
     }
 
     public function pre_get_posts( $query )
@@ -57,6 +58,10 @@ final class NF_Display_Preview
     function template_include()
     {
         return locate_template( array( 'page.php', 'single.php', 'index.php' ) );
+    }
+
+    function post_thumbnail_html() {
+    	return '';
     }
 
 	/**
