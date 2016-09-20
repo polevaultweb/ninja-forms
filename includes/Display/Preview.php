@@ -65,16 +65,14 @@ final class NF_Display_Preview
     }
 
 	/**
-	 * Override the edit post URL with the edit form URL
+	 * Override the edit post URL so the link doesn't go anywhere
 	 *
 	 * @param string $url
 	 *
 	 * @return string
 	 */
 	function get_edit_post_link( $url ) {
-		$url = add_query_arg( 'form_id', $this->_form_id, admin_url( 'admin.php?page=ninja-forms' ) );
-
-		return $url;
+		return '#';
 	}
 
 } // END CLASS NF_Display_Preview
