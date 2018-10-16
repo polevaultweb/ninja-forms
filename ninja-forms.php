@@ -3,7 +3,7 @@
 Plugin Name: Ninja Forms
 Plugin URI: http://ninjaforms.com/
 Description: Ninja Forms is a webform builder with unparalleled ease of use and features.
-Version: 3.3.16
+Version: 3.3.17
 Author: The WP Ninjas
 Author URI: http://ninjaforms.com
 Text Domain: ninja-forms
@@ -57,7 +57,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
         /**
          * @since 3.0
          */
-        const VERSION = '3.3.16';
+        const VERSION = '3.3.17';
 
         const WP_MIN_VERSION = '4.7';
 
@@ -981,7 +981,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
      * @return (Array) The filtered cron recurrences.
      * 
      * @since 
-     * @updated UPDATE_VERSION_ON_MERGE
+     * @updated 3.3.17
      */
     function nf_custom_cron_job_recurrence( $schedules ) {
         $schedules[ 'nf-monthly' ] = array(
@@ -1007,7 +1007,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
     /**
      * Function called via weekly wp_cron to update our marketing feeds.
      * 
-     * @since UPDATE_VERSION_ON_MERGE
+     * @since 3.3.17
      */
     function nf_update_marketing_feed() {
         // Fetch our membership data.
@@ -1032,7 +1032,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
     /**
      * Function called by our marketing feed cron.
      * 
-     * @since UPDATE_VERSION_ON_MERGE
+     * @since 3.3.17
      */
     function nf_marketing_feed_cron_job() {
         if ( ! wp_next_scheduled( 'nf_marketing_feed_cron' ) ) {
