@@ -277,7 +277,7 @@ final class NF_Admin_Menus_Submissions extends NF_Abstracts_Submenu
     public function search( $pieces ) {
         global $typenow;
         // filter to select search query
-        if ( is_search() && is_admin() && $typenow == 'nf_sub' && isset ( $_GET['s'] ) ) {
+        if ( isset ( $_GET['s'] ) && $typenow == 'nf_sub' && is_search() && is_admin() ) {
             global $wpdb;
 
             $keywords = explode(' ', get_query_var('s'));
